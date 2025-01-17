@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block page_content %}
+
+    {{ wtf.quick_form(form) }}
+
+    <h2>Relação de professores cadastrados</h2>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Professor</th>
+                <th>Disciplinas</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for professor in professors %}
+            <tr>
+                <td>{{ professor.nome }}</td>
+                <td>
+                    {% for disciplina in professor.disciplinas %}
+                        {{ disciplina.nome }}{% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

@@ -1,9 +1,14 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, EmailField
+from wtforms import StringField, SubmitField, SelectField
 from wtforms.validators import DataRequired
+from ..models import Disciplina  # Importe o modelo de Disciplina
 
+class NewProfessorForm(FlaskForm):
+    professor = StringField('Cadastre o novo Professor:', validators=[DataRequired()])
+    subject = SelectField('Disciplina associada:', coerce=int, validators=[DataRequired()])
+    submit = SubmitField('Cadastrar')
 
-class NameForm(FlaskForm):
-    name = StringField('Qual é o seu nome?', validators=[DataRequired()])
-    email = EmailField('Qual é o seu email (Envio de notificação do novo usuário)?', validators=[DataRequired()])
-    submit = SubmitField('Submit')
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Carrega as disciplinas do banco de dados
+        self.subject.choices = [(disciplina.id, disciplina.nome) for disciplina in Disciplina.query.all()]
